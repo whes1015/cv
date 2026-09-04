@@ -22,11 +22,14 @@ CV 以資料夾做版本管理：`v1/`、`v2/`、`v3/`……
 
 ### 目前狀態
 
-| 版本 | 日期 | 內容 |
-|------|------|------|
-| `v1/` | 2026-09-04 | 首版；中英雙版本，各 2 頁 A4，投軟體工程職缺／實習 |
+| 版本 | 日期 | 版面 | 內容 |
+|------|------|------|------|
+| `v1/` | 2026-09-04 | 自製 `cvstyle.sty` | 首版；中英雙版本，各 2 頁 A4 |
+| `v2/` | 2026-09-04 | `resume.cls`（liweitianux） | 改用參考樣式重製；中英雙版本，各 2 頁 A4 |
 
-**下一個新版是 `v2/`。**
+**下一個新版是 `v3/`。**
+
+各版本的版面與工具鏈可以不同 —— 建置指令與字型需求請看該版本目錄自己的說明（下一節）。
 
 ## 2. 建置
 
@@ -39,10 +42,27 @@ tectonic -X compile cv-zh.tex
 ```
 
 - 引擎：XeLaTeX（透過 `tectonic`，用 `brew install tectonic` 安裝）。
-- 拉丁字型：TeX Gyre Pagella / Heros，**以檔名載入**（`\setmainfont{texgyrepagella}[Extension=.otf, ...]`）。
+
+### v1 的字型
+- 拉丁：TeX Gyre Pagella / Heros，**以檔名載入**（`\setmainfont{texgyrepagella}[Extension=.otf, ...]`）。
   不要改成用字型家族名稱載入 —— tectonic 的 bundle 查不到家族名，會編譯失敗。
-- 中文字型：`Heiti TC`（macOS 系統字型）。換平台要改 `\setCJKmainfont`。
+- 中文：`Heiti TC`（macOS 內建）。
 - `xeCJK` 會把破折號與引號當成 CJK 字元、排成全形。`\xeCJKDeclareCharClass{Default}{...}` 那行是用來擋這件事的，不要刪。
+
+### v2 的字型與版面
+```bash
+brew install --cask font-ibm-plex-serif font-ibm-plex-mono \
+                    font-noto-serif-cjk-tc font-noto-serif-cjk-sc
+```
+- 版面來自 `resume.cls`，作者 Weitian LI，授權 **LPPL 1.3c**，取自
+  <https://github.com/liweitianux/resume>（其本身衍生自 Christophe Roger 的 YACC 與 Plasmati Graduate CV）。
+- **`resume.cls` 是上游原檔，一個字都沒改，也不要改。** 需要調整就在 `.tex` 裡覆寫
+  （字型縮放、`\geometry`、`\linespread`、`\titlespacing` 都是這樣做的）。保持原檔才能隨時換上游新版。
+- 實際使用的中文字型是 **Noto Serif CJK TC**；但 `resume.cls` 在 `[zh]` 選項下於載入時就寫死了
+  `Noto Serif CJK SC`，所以 **SC 也必須安裝**，否則編譯失敗。這是保留原檔的代價。
+- `cv-en.tex` 沒有用 `[zh]` 選項，因此自行 `\usepackage{xeCJK}` 來排中文人名。
+- 兩份都在 `\project`／`\sectionTitle` 前用 `\newpage` 手動分頁，避免章節標題落單在頁尾。
+  改動內容後要重新確認頁面平衡。
 
 ## 3. 內容規則：不造假
 
@@ -91,4 +111,5 @@ ExpTech（探索科技）創辦人，國立高雄科技大學電機工程系。
 
 ## 5. 待補
 
-- 學歷缺**預計畢業年月**。`.tex` 裡的 `\role{...}` 已留 TODO 註解，下一版補上。
+- 學歷缺**預計畢業年月**。v1 的 `\role{...}` 與 v2 的 `\education{...}` 都留了 TODO 註解；
+  要補上就開 `v3/`（不可直接改 v1/v2）。
