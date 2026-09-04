@@ -1,0 +1,157 @@
+% 郭宸毓 — 履歷（繁體中文）。編譯：tectonic -X compile cv-zh.tex
+\documentclass[10pt,a4paper]{article}
+
+\usepackage{fontspec}
+\setmainfont{texgyrepagella}[Extension=.otf,
+  UprightFont=*-regular, BoldFont=*-bold, ItalicFont=*-italic, BoldItalicFont=*-bolditalic]
+\setsansfont{texgyreheros}[Extension=.otf,
+  UprightFont=*-regular, BoldFont=*-bold, ItalicFont=*-italic, BoldItalicFont=*-bolditalic]
+\usepackage{xeCJK}
+\setCJKmainfont{Heiti TC}
+\setCJKsansfont{Heiti TC}
+\XeTeXlinebreaklocale "zh"
+\XeTeXlinebreakskip = 0pt plus 1pt minus 0.1pt
+% 西文標點維持拉丁字型，避免 xeCJK 以全形呈現
+\xeCJKDeclareCharClass{Default}{"2013, "2014, "2018, "2019, "201C, "201D, "2026, "2032}
+
+\newcommand{\cvfootline}{郭宸毓 Chen-Yu Kuo \textperiodcentered\ 履歷}
+\usepackage{cvstyle}
+
+\begin{document}
+
+\cvname{郭宸毓}{Chen-Yu Kuo}
+\cvtagline{系統與全端工程師 —— 從感測器韌體、伺服器叢集到地動模型，負責地震警報的完整鏈路}
+\cvcontact{%
+  \faMapMarker*\enspace 高雄，臺灣 \dt
+  \faEnvelope\enspace \href{mailto:whes1015@gmail.com}{whes1015@gmail.com} \dt
+  \faGithub\enspace \href{https://github.com/whes1015}{github.com/whes1015} \dt
+  \faRobot\enspace \href{https://huggingface.co/YuYu1015}{huggingface.co/YuYu1015} \dt
+  \faGlobe\enspace \href{https://exptech.dev}{exptech.dev}}
+
+\vspace{7pt}
+{\fontsize{9.4}{13.6}\selectfont
+我創辦並帶領 \textbf{ExpTech（探索科技）}——一個 29 人的志工工程組織，建置並維運臺灣規模最大的獨立地震預警平臺。
+我負責一則地震警報從產生到送達的整條路徑：逐暫存器親手撰寫的 ESP32 加速度計韌體、接收其回報的跨區域伺服器叢集、
+決定警報內容的地動預估模型，以及超過 10 萬人安裝來接收警報的 Flutter 應用程式。
+\par}
+
+% ------------------------------------------------------------------ 經歷
+\section{工作經歷}
+
+\role{創辦人暨技術負責人}{ExpTech（探索科技）}{臺灣 —— 志工型工程組織，29 名成員、234 個儲存庫}{2020 年 10 月 — 迄今}
+\begin{itemize}
+  \item 擔任組織兩位管理者之一。於組織內提交 \num{13,411} 次 commit（GitHub 全站 \num{19,284} 次、\num{477} 個 PR），
+        並在所有核心專案皆為最大貢獻者：DPIP \num{838}/2,339、TREM-Lite \num{448}/847、平臺 API \num{480}/803，
+        並獨力完成 665 次 commit 的正式環境基礎設施儲存庫。
+  \item 2022 年底與\textbf{中央氣象署}簽訂資料合作；《親子天下》報導其為地震測報中心第一組非公司組織的合作對象。
+        並以合作者身分進出測報中心逾 10 次（《天下雜誌》，2026 年 2 月）。
+  \item 面向真實使用者、承擔真實風險：DPIP 於 Google Play 累計 \textbf{10 萬次以上}安裝，
+        App Store 1,378 則評分平均 \textbf{4.2}；TREM 桌面版安裝檔累計 \textbf{328,542} 次下載。
+        2024 年 4 月 3 日花蓮 M7.2 地震當日，觀測網於一日內記錄到 800 起以上地震事件。
+  \item 將起初的校園專案擴展為涵蓋韌體、37 個 Go 服務、Flutter 用戶端與機器學習流程的完整系統，
+        並負責分散式學生工程團隊的招募與程式碼審查。
+\end{itemize}
+
+% ------------------------------------------------------------------ 成果
+\section{精選技術成果}
+
+\project{地動預估與地震波相位辨識模型}{Python \textperiodcentered\ PyTorch \textperiodcentered\ SeisBench \textperiodcentered\ ONNX \textperiodcentered\ 獨力開發}{huggingface.co/YuYu1015}{https://huggingface.co/YuYu1015}
+\begin{itemize}
+  \item 以中央氣象署 2000–2025 年共 \num{45,398} 筆 PGA/PGV/震度觀測重新校正臺灣震度預估模型，
+        取代對規模過度放大的舊式公式；新增直接預估 PGV 的 GMPE，並修正場址放大重複計算（原高估約 2 倍）。
+        留出事件驗證：震度\textbf{完全命中 62.0\%（原生產環境模型 39.7\%）}、MAE \textbf{0.400（原 0.671）}、誤報率 0\%。
+        以 \textit{IntensityGMM-TW-45k-v1} 發布。
+  \item 訓練 50\,Hz PhaseNet P/S 波相位辨識模型，建立 6,457 行的完整流程（資料匯入、雜訊注入、評估、ONNX 匯出）。
+        並診斷修復一項視窗設定錯誤：來源視窗短於模型視窗，導致模型學成「P 波恆在視窗中央」，
+        推論時每 45\,秒 stride 即產生一次誤拾取。以 \textit{PhaseNet-50Hz-268k-v1} 發布。
+  \item 建立「P 波視窗 $\rightarrow$ S 波振幅」迴歸模型：取 P 波後 1–5\,秒特徵
+        （$\tau_c$，依 Wu \& Kanamori 2005、頻譜質心與頻寬、峰態、過零率）輸入 CNN 與表格式模型。
+\end{itemize}
+
+\project{ES-Net —— 地震儀韌體與全臺觀測網}{C++ \textperiodcentered\ ESP32 \textperiodcentered\ FreeRTOS \textperiodcentered\ 獨力開發，7,759 行}{}{}
+\begin{itemize}
+  \item 不依賴原廠函式庫，\textbf{逐暫存器手寫 LSM6DS3 加速度計驅動}——自建暫存器對應表，
+        涵蓋 \textsc{who\_am\_i}、\textsc{ctrl1\_xl}、\textsc{int1\_ctrl} 與 FIFO 路徑。
+  \item 於裝置端即時計算 \textbf{JMA 震度}：IIR 濾波器組，搭配樹狀陣列（BIT）維護 JMA 震度所需的振幅百分位。
+  \item 分散式地震儀最難的是時間：SNTP 採用 \textsc{smooth} 同步模式，讓時鐘平滑校正而非在波形中途跳動，
+        同步間隔 60\,秒；並實作軟硬體看門狗、OTA 更新，以及具備 TOTP 測站驗證的自訂二進位通訊協定（含規格文件）。
+  \item 支撐全臺 \textbf{200 個以上 TREM-Net 測站}；第一代裝置為自行組裝，單台成本低於新臺幣 800 元。
+\end{itemize}
+
+\project{TREM —— 即時地震監測桌面平臺}{JavaScript/Electron \textperiodcentered\ Rust \textperiodcentered\ 93 stars \textperiodcentered\ 最大貢獻者 448/847}{ExpTechTW/TREM-Lite}{https://github.com/ExpTechTW/TREM-Lite}
+\begin{itemize}
+  \item 桌面端用戶端，即時繪示來自 TREM-Net 與中央氣象署的地動資料。現行與前一代版本合計 74 個發行版本、
+        安裝檔累計 \textbf{328,542} 次下載，自 2023 年 1 月起持續發布。
+  \item 設計供第三方擴充的外掛系統並維護其註冊表（417 次 commit）；另以 Rust 開發測站健康監控服務
+        \texttt{trem-monitor}（105/150 commit）。
+\end{itemize}
+
+\project{QZSS L1S 災防訊息解碼器}{C++ \textperiodcentered\ 獨力開發 \textperiodcentered\ 約 12,000 行、含單元測試}{}{}
+\begin{itemize}
+  \item 完整解碼 QZSS L1S 250 位元 SBAS 訊框——前導碼、6 位元訊息型別、212 位元酬載與 CRC-24Q——
+        包含型別 43 \textbf{DC Report}（日本氣象廳災防廣播，IS-QZSS-DCR）與型別 44 DCX。
+\end{itemize}
+
+\project{正式環境基礎設施}{Go \textperiodcentered\ eBPF/XDP \textperiodcentered\ OpenResty \textperiodcentered\ CoreDNS \textperiodcentered\ 獨力開發}{}{}
+\begin{itemize}
+  \item \textbf{kekkai}——以 Go 搭配 \texttt{cilium/ebpf} 實作封包過濾：XDP 入向程式與 TC 出向掛鉤，
+        使用 \textsc{lru\_hash}/\textsc{array}/\textsc{ringbuf} map 實現單一 IP 速率限制、允許／封鎖名單與連接埠政策，並具緊急卸載路徑。
+  \item \textbf{Nginx/OpenResty 伺服器群}——跨臺北、高雄、臺南、東京、大阪節點共 23 個 upstream，
+        並以 Lua 模組處理流量統計、NTP 與影像代理。
+  \item \textbf{分流式（split-horizon）CoreDNS}，自製 Go \texttt{dnsstats} 外掛（\texttt{miekg/dns}），
+        提供各網域／各用戶端查詢統計與 Prometheus 指標。
+  \item 同樣獨力開發平臺的 NTP 伺服器、API 閘道與 Meshtastic LoRa 資料接收服務——為組織營運的 37 個 Go 服務之一部分。
+\end{itemize}
+
+\project{DPIP —— 跨平臺防災速報應用程式}{Dart/Flutter \textperiodcentered\ TypeScript \textperiodcentered\ 最大貢獻者}{ExpTechTW/DPIP}{https://github.com/ExpTechTW/DPIP}
+\begin{itemize}
+  \item iOS 與 Android 用戶端，整合 TREM-Net 與中央氣象署資料源，實作即時推播告警、MapLibre 圖層與 10 種介面語言。
+        獨力撰寫該儲存庫的測試套件與自訂 commit 檢查工具鏈，並完整開發後端服務 \texttt{dpip-server-ts}。
+\end{itemize}
+
+\project{大型語言模型推論與模型壓縮}{PyTorch \textperiodcentered\ vLLM \textperiodcentered\ llm-compressor \textperiodcentered\ 發布 27 個模型、約 10,600 次下載}{}{}
+\begin{itemize}
+  \item 將大型開源模型量化為 \textbf{NVFP4}（TensorRT Model Optimizer）、INT4-AutoRound 與 GGUF，
+        供 vLLM 與 llama.cpp 部署，涵蓋至 35B 規模的 MoE 架構。
+  \item 實作\textbf{拒答方向消融（refusal-direction ablation）}：由成對提示求出拒答方向，
+        並將其自權重矩陣正交化移除；在上游參考實作之上延伸，發布 \textit{Ornith-1.0} 9B/35B 系列，含 DPO 微調版本。
+\end{itemize}
+
+\project{資安與事件應變}{蜜罐 \textperiodcentered\ 惡意程式分析}{}{}
+\begin{itemize}
+  \item 架設蜜罐，於 \textbf{CVE-2025-55182}（React Server Components，CVSS 10.0）2025 年 12 月揭露後數日內，
+        捕獲實際在野的攻擊行為；記錄並驗證 6 個惡意程式樣本雜湊值與 15 個攻擊來源 IP。
+\end{itemize}
+
+% ------------------------------------------------------------------ 技能
+\section{技術能力}
+\skl{程式語言}{TypeScript／JavaScript、Go、Python、Dart、C/C++、Rust、Lua、Shell}
+\skl{系統與網路}{Linux、eBPF/XDP、Docker、Nginx/OpenResty、CoreDNS、WebSocket 與 SSE、NTP、Prometheus、CI/CD}
+\skl{嵌入式}{ESP32/Arduino、FreeRTOS、I\textsuperscript{2}C/SPI、LSM6DS3、GNSS（QZSS L1S）、LoRa/Meshtastic、RTL-SDR}
+\skl{機器學習}{PyTorch、SeisBench、ONNX、scikit-learn、vLLM、llm-compressor、TensorRT Model Optimizer}
+\skl{領域知識}{地震預警、GMPE 校正、中央氣象署／JMA 震度階、地震波相位辨識、NonLinLoc 走時網格}
+
+% ------------------------------------------------------------------ 學歷
+\section{學歷}
+% TODO：可於最後一個參數填入預計畢業時間，例如 {預計 2027 年 6 月 畢業}
+\role{電機工程學系 學士}{國立高雄科技大學（NKUST）}{}{高雄，臺灣}
+
+% ------------------------------------------------------------------ 報導
+\section{開源貢獻與社群}
+\begin{itemize}
+  \item 於自身組織之外的專案累計 \textbf{12 個已合併的 Pull Request}——包含為開源地震儀專案 \textbf{AnyShake} 的
+        \texttt{spectrogram-js} 提交繪製效能優化、為 \texttt{smc.peering.tw} 將 Leaflet 遷移至 MapLibre，
+        以及為母校官方學生應用程式 \textbf{NKUST-AP-Flutter} 升級 Flutter 工具鏈。
+\end{itemize}
+
+\section{媒體報導}
+\begin{itemize}
+  \item \textbf{《天下雜誌》}，2026 年 2 月——於中央氣象署地震測報中心人物專訪中，以 ExpTech 合作者身分具名受訪。
+  \item \textbf{《親子天下》翻轉教育}，2024 年 7 月——DPIP 團隊專題報導；該 App 於 0403 地震後累計下載約 50 萬次。
+\end{itemize}
+
+\note{數據來源——commit 數取自 GitHub commit 搜尋索引與各儲存庫貢獻者統計（2026 年 9 月擷取）。
+TREM 下載數僅計算安裝檔（\texttt{.exe}／\texttt{.dmg}／\texttt{.deb}／\texttt{.AppImage}／\texttt{.zip}），
+已排除 GitHub 同樣計為下載的 430 萬次自動更新中繼資料請求。}
+
+\end{document}

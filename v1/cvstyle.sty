@@ -1,0 +1,85 @@
+% cvstyle.sty — shared layout for cv-en.tex / cv-zh.tex
+% Engine: XeLaTeX (tectonic). CJK handled by the including document.
+\ProvidesPackage{cvstyle}
+
+\usepackage[a4paper,top=13mm,bottom=13mm,left=15mm,right=15mm,footskip=8mm]{geometry}
+\usepackage{fontspec}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{fontawesome5}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{microtype}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+
+% ---------------------------------------------------------------- palette
+\definecolor{ink}{HTML}{15191F}
+\definecolor{muted}{HTML}{5A6472}
+\definecolor{faint}{HTML}{8A94A2}
+\definecolor{accent}{HTML}{0B4F8A}
+\definecolor{hairline}{HTML}{C8CED6}
+
+\color{ink}
+\hypersetup{urlcolor=accent, colorlinks=true, linkcolor=ink}
+
+% ---------------------------------------------------------------- spacing
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt}
+\linespread{1.045}
+\raggedbottom
+\raggedright
+
+\pagestyle{fancy}\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\fancyfoot[C]{\color{faint}\sffamily\fontsize{7.6}{9}\selectfont \cvfootline\ \textperiodcentered\ \thepage/\pageref{LastPage}}
+\usepackage{lastpage}
+
+% ---------------------------------------------------------------- sections
+\titleformat{\section}
+  {\sffamily\bfseries\fontsize{9.6}{11}\selectfont\color{accent}}
+  {}{0pt}{\MakeUppercase}[\vspace{1.2pt}{\color{hairline}\hrule height 0.6pt}]
+\titlespacing*{\section}{0pt}{9pt plus 2pt minus 2pt}{5pt}
+
+% ---------------------------------------------------------------- header
+% \cvname{Latin name}{CJK name}
+\newcommand{\cvname}[2]{%
+  {\sffamily\bfseries\fontsize{21}{24}\selectfont #1%
+   \ifx\relax#2\relax\else\hspace{5pt}{\fontsize{15}{18}\selectfont\color{muted}#2}\fi\par}}
+\newcommand{\cvtagline}[1]{\vspace{2.5pt}{\sffamily\fontsize{9.8}{12.5}\selectfont\color{muted}#1\par}}
+\newcommand{\cvcontact}[1]{\vspace{4pt}{\sffamily\fontsize{8.5}{11}\selectfont\color{muted}#1\par}}
+\newcommand{\dt}{\hspace{4pt}\textcolor{hairline}{\textbar}\hspace{4pt}}
+
+% ---------------------------------------------------------------- entries
+% \role{title}{org}{meta}{dates}
+\newcommand{\role}[4]{%
+  \vspace{3pt}%
+  \begin{tabularx}{\linewidth}{@{}X r@{}}
+    {\sffamily\bfseries\fontsize{10.3}{12.5}\selectfont #1}%
+      \ifx\relax#2\relax\else{\sffamily\fontsize{10.3}{12.5}\selectfont\color{muted}\hspace{2pt}\textbf{\textperiodcentered}\hspace{3pt}#2}\fi
+    & {\sffamily\fontsize{8.6}{11}\selectfont\color{muted}#4}\\[1pt]
+    \multicolumn{2}{@{}p{\linewidth}@{}}{\ifx\relax#3\relax\else{\sffamily\itshape\fontsize{8.6}{11}\selectfont\color{faint}#3}\fi}
+  \end{tabularx}\vspace{2pt}}
+
+% \project{name}{stack}{link text}{url}
+\newcommand{\project}[4]{%
+  \vspace{3.5pt}%
+  {\sffamily\bfseries\fontsize{9.9}{12}\selectfont #1}%
+  {\sffamily\fontsize{8.4}{11}\selectfont\color{faint}\hspace{4pt}#2}%
+  \ifx\relax#4\relax\else{\sffamily\fontsize{8.2}{11}\selectfont\hspace{4pt}\href{#4}{\color{accent}#3}}\fi
+  \par\vspace{1pt}}
+
+\setlist[itemize]{leftmargin=10pt, labelsep=5pt, topsep=1.5pt, itemsep=1.6pt,
+                  parsep=0pt, partopsep=0pt, before=\fontsize{9.15}{12.1}\selectfont}
+\renewcommand{\labelitemi}{\textcolor{hairline}{\rule[1.05ex]{4pt}{0.7pt}}}
+
+% skills row: \skl{label}{content}
+\newcommand{\skl}[2]{%
+  \par\vspace{2.2pt}\noindent
+  \hangindent=68pt \hangafter=1
+  \makebox[62pt][l]{\sffamily\bfseries\fontsize{8.6}{11}\selectfont\color{muted}#1}%
+  \hspace{6pt}{\fontsize{9.05}{12}\selectfont #2}\par}
+
+\newcommand{\note}[1]{\vspace{2pt}{\sffamily\fontsize{7.7}{9.6}\selectfont\color{faint}#1\par}}
+\newcommand{\num}[1]{\textbf{#1}}

@@ -1,0 +1,171 @@
+% Chen-Yu Kuo — CV (English).  Build: tectonic -X compile cv-en.tex
+\documentclass[10pt,a4paper]{article}
+
+\usepackage{fontspec}
+\setmainfont{texgyrepagella}[Extension=.otf,
+  UprightFont=*-regular, BoldFont=*-bold, ItalicFont=*-italic, BoldItalicFont=*-bolditalic]
+\setsansfont{texgyreheros}[Extension=.otf,
+  UprightFont=*-regular, BoldFont=*-bold, ItalicFont=*-italic, BoldItalicFont=*-bolditalic]
+\usepackage{xeCJK}
+\setCJKmainfont{Heiti TC}
+\XeTeXlinebreaklocale "zh"
+% Keep Western punctuation in the Latin font (xeCJK otherwise renders
+% em/en dashes and quotes with the CJK face as full-width glyphs).
+\xeCJKDeclareCharClass{Default}{"2013, "2014, "2018, "2019, "201C, "201D, "2026, "2032}
+
+\newcommand{\cvfootline}{Chen-Yu Kuo \textperiodcentered\ Curriculum Vitae}
+\usepackage{cvstyle}
+
+\begin{document}
+
+\cvname{Chen-Yu Kuo}{郭宸毓}
+\cvtagline{Systems and full-stack engineer — real-time earthquake early warning, from sensor firmware to the app that rings}
+\cvcontact{%
+  \faMapMarker*\enspace Kaohsiung, Taiwan \dt
+  \faEnvelope\enspace \href{mailto:whes1015@gmail.com}{whes1015@gmail.com} \dt
+  \faGithub\enspace \href{https://github.com/whes1015}{github.com/whes1015} \dt
+  \faRobot\enspace \href{https://huggingface.co/YuYu1015}{huggingface.co/YuYu1015} \dt
+  \faGlobe\enspace \href{https://exptech.dev}{exptech.dev}}
+
+\vspace{7pt}
+{\fontsize{9.4}{12.4}\selectfont
+I founded and lead \textbf{ExpTech}, a 29-person volunteer engineering organisation that builds and operates Taiwan's
+largest independent earthquake early-warning platform. I work the whole path a seismic alert travels: the ESP32
+accelerometer firmware I wrote register by register, the multi-region ingest and alerting fleet it reports to, the
+ground-motion models that decide what the alert says, and the Flutter app that over 100,000 people installed to receive it.
+\par}
+
+% ------------------------------------------------------------------ experience
+\section{Experience}
+
+\role{Founder \& Lead Engineer}{ExpTech (探索科技)}{Taiwan — volunteer engineering organisation, 29 members, 234 repositories}{Oct 2020 — Present}
+\begin{itemize}
+  \item Lead the organisation as one of its two administrators. Authored \num{13,411} commits inside it
+        (\num{19,284} across GitHub, \num{477} pull requests) and am the top contributor on every flagship codebase:
+        DPIP \num{838}/2,339, TREM-Lite \num{448}/847, platform API \num{480}/803 — and sole author of the
+        665-commit production infrastructure repository.
+  \item Signed a data agreement with Taiwan's \textbf{Central Weather Administration (CWA)} in late 2022; reported by
+        \textit{親子天下} as the Seismological Center's first non-corporate partner. Invited back to the centre
+        10+ times as a collaborator (\textit{天下雜誌}, Feb 2026).
+  \item Ship under real stakes to real users: \textbf{100,000+} Google Play installs and \textbf{4.2/5} from 1,378 App Store ratings for DPIP; \textbf{328,542} installer downloads across TREM desktop releases.
+        During the M7.2 Hualien earthquake (3 Apr 2024) the network recorded 800+ events in a single day.
+  \item Grew the codebase from a school-project origin into a fleet spanning firmware, 37 Go services, Flutter
+        clients and ML pipelines — recruiting and reviewing a distributed team of student engineers.
+\end{itemize}
+
+% ------------------------------------------------------------------ projects
+\section{Selected Engineering Work}
+
+\project{Ground-motion \& phase-picking models}{Python \textperiodcentered\ PyTorch \textperiodcentered\ SeisBench \textperiodcentered\ ONNX \textperiodcentered\ sole author}{huggingface.co/YuYu1015}{https://huggingface.co/YuYu1015}
+\begin{itemize}
+  \item Refit Taiwan's shaking-intensity model on \num{45,398} CWA PGA/PGV/intensity observations (2000–2025),
+        replacing a legacy equation that over-amplified with magnitude. Added a direct PGV ground-motion prediction
+        equation and corrected a site-amplification double-count that inflated estimates roughly 2$\times$.
+        Held-out result: \textbf{62.0\% exact intensity vs 39.7\%} for the model then in production,
+        MAE \textbf{0.400 vs 0.671}, with 0\% false alarms. Released as \textit{IntensityGMM-TW-45k-v1}.
+  \item Trained a 50\,Hz PhaseNet P/S phase picker — a 6,457-line pipeline covering dataset ingest, noise injection,
+        evaluation and ONNX export. Diagnosed a windowing bug in which the source window was shorter than the model
+        window, teaching the model that P always sits mid-window and emitting a false pick every 45\,s stride.
+        Released as \textit{PhaseNet-50Hz-268k-v1}.
+  \item Built a P-window $\rightarrow$ S-amplitude regressor: 1–5\,s post-P features ($\tau_c$ after
+        Wu \& Kanamori 2005, spectral centroid and bandwidth, kurtosis, zero crossings) into CNN and tabular models.
+\end{itemize}
+
+\project{ES-Net — seismometer firmware \& national sensor network}{C++ \textperiodcentered\ ESP32 \textperiodcentered\ FreeRTOS \textperiodcentered\ sole author, 7,759 LOC}{}{}
+\begin{itemize}
+  \item Hand-wrote an \textbf{LSM6DS3 accelerometer driver at register level} — own register map, \textsc{who\_am\_i},
+        \textsc{ctrl1\_xl}, \textsc{int1\_ctrl} and FIFO paths — rather than depending on a vendor library.
+  \item On-device \textbf{JMA seismic-intensity} computation: an IIR filter bank plus a binary indexed tree for the
+        running amplitude percentile the JMA scale requires.
+  \item Timing is the hard problem in a distributed seismometer: SNTP using \textsc{smooth} sync mode so the clock
+        slews rather than steps mid-waveform, on a 60\,s interval — alongside hardware and software watchdogs,
+        OTA update, and a documented custom binary wire protocol with TOTP station authentication.
+  \item Feeds \textbf{200+ TREM-Net stations} nationwide; the first-generation units were self-assembled for under
+        NT\$800 each.
+\end{itemize}
+
+\project{TREM — real-time earthquake monitoring desktop platform}{JavaScript/Electron \textperiodcentered\ Rust \textperiodcentered\ 93 stars \textperiodcentered\ top contributor 448/847}{ExpTechTW/TREM-Lite}{https://github.com/ExpTechTW/TREM-Lite}
+\begin{itemize}
+  \item Desktop client that renders live ground motion from TREM-Net and CWA feeds. \textbf{328,542 installer
+        downloads} across 74 releases of the current and previous generations, shipped continuously since Jan 2023.
+  \item Designed the plugin system third parties extend the client through and maintain its registry (417 commits);
+        wrote the companion \texttt{trem-monitor} station-health service in Rust (105/150 commits).
+\end{itemize}
+
+\project{QZSS L1S disaster-message decoder}{C++ \textperiodcentered\ sole author \textperiodcentered\ {\raise0.06ex\hbox{$\sim$}}12k LOC with unit tests}{}{}
+\begin{itemize}
+  \item Decodes QZSS L1S 250-bit SBAS frames end to end — preamble, 6-bit message type, 212-bit payload and
+        CRC-24Q — including type 43 \textbf{DC Report} (JMA disaster broadcasts, IS-QZSS-DCR) and type 44 DCX.
+\end{itemize}
+
+\project{Production infrastructure}{Go \textperiodcentered\ eBPF/XDP \textperiodcentered\ OpenResty \textperiodcentered\ CoreDNS \textperiodcentered\ sole author}{}{}
+\begin{itemize}
+  \item \textbf{kekkai} — packet filter in Go using \texttt{cilium/ebpf}, with an XDP ingress program and a TC egress
+        hook; \textsc{lru\_hash}/\textsc{array}/\textsc{ringbuf} maps drive per-IP rate limiting, allow/blocklists and
+        port policy, with an emergency detach path.
+  \item \textbf{Nginx/OpenResty fleet} — 23 upstreams across nodes in Taipei, Kaohsiung, Tainan, Tokyo and Osaka,
+        with Lua modules for traffic accounting, NTP and image proxying.
+  \item \textbf{Split-horizon CoreDNS} with a custom Go \texttt{dnsstats} plugin (\texttt{miekg/dns}) exposing
+        per-domain and per-client query statistics plus Prometheus metrics.
+  \item Sole author too of the platform's NTP server, API gateway and Meshtastic LoRa ingest service — among the
+        37 Go services the organisation runs.
+\end{itemize}
+
+\project{DPIP — cross-platform disaster alerting}{Dart/Flutter \textperiodcentered\ TypeScript \textperiodcentered\ top contributor}{ExpTechTW/DPIP}{https://github.com/ExpTechTW/DPIP}
+\begin{itemize}
+  \item iOS and Android client integrating TREM-Net and CWA feeds with push alerting, MapLibre layers and
+        10 interface languages. Wrote the repository's test suite and its custom commit-gate tooling outright,
+        and authored the backend service \texttt{dpip-server-ts} in full.
+\end{itemize}
+
+\project{LLM inference \& model compression}{PyTorch \textperiodcentered\ vLLM \textperiodcentered\ llm-compressor \textperiodcentered\ 27 models, {\raise0.06ex\hbox{$\sim$}}10,600 downloads}{}{}
+\begin{itemize}
+  \item Quantise large open models to \textbf{NVFP4} (TensorRT Model Optimizer), INT4-AutoRound and GGUF for
+        vLLM and llama.cpp serving, including MoE architectures up to 35B.
+  \item Implemented \textbf{refusal-direction ablation} — deriving the refusal direction from paired prompts and
+        orthogonalising it out of the weight matrices — extending the upstream reference implementation, and
+        released the \textit{Ornith-1.0} 9B/35B line including a DPO-tuned variant.
+\end{itemize}
+
+\project{Security \& incident response}{honeypot \textperiodcentered\ malware triage}{}{}
+\begin{itemize}
+  \item Operated a honeypot that captured \textbf{in-the-wild exploitation of CVE-2025-55182} (React Server
+        Components, CVSS 10.0) within days of its December 2025 disclosure; documented six malware samples with
+        verified hashes and fifteen attacker source addresses.
+\end{itemize}
+
+% ------------------------------------------------------------------ skills
+\section{Technical Skills}
+\skl{Languages}{TypeScript/JavaScript, Go, Python, Dart, C/C++, Rust, Lua, Shell}
+\skl{Systems}{Linux, eBPF/XDP, Docker, Nginx/OpenResty, CoreDNS, WebSocket \& SSE, NTP, Prometheus, CI/CD}
+\skl{Embedded}{ESP32/Arduino, FreeRTOS, I\textsuperscript{2}C/SPI, LSM6DS3, GNSS (QZSS L1S), LoRa/Meshtastic, RTL-SDR}
+\skl{ML}{PyTorch, SeisBench, ONNX, scikit-learn, vLLM, llm-compressor, TensorRT Model Optimizer}
+\skl{Domain}{Earthquake early warning, GMPE calibration, CWA/JMA intensity scales, phase picking, NonLinLoc travel-time grids}
+
+% ------------------------------------------------------------------ education
+\section{Education}
+% TODO: add your expected graduation, e.g. {Expected Jun 2027} in the last argument.
+\role{B.S., Electrical Engineering}{National Kaohsiung University of Science and Technology (NKUST)}{}{Kaohsiung, Taiwan}
+
+% ------------------------------------------------------------------ press
+\section{Open Source \& Community}
+\begin{itemize}
+  \item \textbf{12 merged pull requests} to projects outside my own organisation — a rendering-performance fix to
+        \textbf{AnyShake}'s \texttt{spectrogram-js} (an open-source seismograph suite), a Leaflet~$\rightarrow$~MapLibre
+        migration for \texttt{smc.peering.tw}, and Flutter toolchain upgrades to \textbf{NKUST-AP-Flutter},
+        my university's official student app.
+\end{itemize}
+
+\section{Press \& Recognition}
+\begin{itemize}
+  \item \textbf{天下雜誌} (CommonWealth Magazine), Feb 2026 — quoted by name as an ExpTech collaborator in a profile
+        of the CWA Seismological Center.
+  \item \textbf{親子天下 翻轉教育}, Jul 2024 — feature on the DPIP team; the app reached roughly 500,000 downloads
+        following the 3 April 2024 earthquake.
+\end{itemize}
+
+\note{Provenance — commit counts are from GitHub's commit-search index and per-repository contributor statistics
+(retrieved Sep 2026). The TREM download figure counts installer assets only (\texttt{.exe}/\texttt{.dmg}/\texttt{.deb}/\texttt{.AppImage}/\texttt{.zip}),
+excluding 4.3M auto-updater metadata requests that GitHub also reports as downloads.}
+
+\end{document}
