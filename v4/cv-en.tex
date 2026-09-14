@@ -1,0 +1,297 @@
+%% Chen-Yu Kuo — resume (English)  [v4: single-line date ranges; rebalanced away from EEW]
+%% Build: tectonic -X compile cv-en.tex
+%%
+%% Layout uses resume.cls by Weitian LI (LPPL 1.3c), vendored here verbatim:
+%%   https://github.com/liweitianux/resume
+%% itself based on YACC by Christophe Roger and Plasmati Graduate CV.
+
+\documentclass{resume}
+
+%% Density tuning. resume.cls defaults to margin=1.5cm and \linespread{1.15};
+%% this CV carries more content, so tighten a little without changing the look.
+\usepackage{geometry}
+\geometry{top=1.0cm, bottom=0.9cm, left=1.05cm, right=1.05cm, includefoot}
+\linespread{1.0}
+\setlength{\parskip}{0.35ex plus 0.3ex minus 0.1ex}
+\setlist[itemize,1]{label=\faAngleRight, leftmargin=1.2em, labelsep=0.45em,
+                    topsep=0.2ex, itemsep=0.25ex, parsep=0pt}
+\titlespacing{\section}{0em}{0.6ex}{0.6ex}
+
+%% v4: dates are written as one-line ranges ("Nov 2023 -- Nov 2024") instead of the
+%% class's stacked end-over-start pair, which read as two separate dates. The widest
+%% range measures 96.4pt, so the date column needs 81pt -> 103pt; the right column
+%% gives back the same 22pt so the total width is unchanged.
+\addtolength{\leftcolwidth}{22pt}
+\addtolength{\rightcolwidth}{-22pt}
+
+%% Scale the class's fonts down a touch so the content lands on two pages.
+\setmainfont{IBM Plex Serif}[Scale=0.93]
+\setmonofont{IBM Plex Mono}[Scale=0.87]
+
+%% resume.cls only loads xeCJK under the [zh] option; this English document
+%% still needs CJK glyphs for a handful of proper nouns.
+\usepackage{xeCJK}
+\setCJKmainfont{Noto Serif CJK TC}[Scale=0.93]
+\XeTeXlinebreaklocale "zh"
+
+\fileinfo{%
+  \faGithub{} \link{https://github.com/whes1015/cv}{whes1015/cv} \hspace{0.5em}
+  Layout: \link{https://github.com/liweitianux/resume}{liweitianux/resume} (LPPL~1.3c) \hspace{0.5em}
+  \faEdit{} \today
+}
+
+\name{Chen-Yu}{Kuo}
+\keywords{Go, TypeScript, Python, C++, Rust, Flutter, eBPF, XDP, CoreDNS, embedded, ESP32,
+  PyTorch, LLM quantisation, seismology, earthquake early warning}
+\tagline{郭宸毓 \enspace\textbullet\enspace Systems \& full-stack engineer --- eBPF/Go infrastructure,
+  ESP32 firmware, applied ML and LLM inference, earthquake early warning}
+
+\profile{
+  \email{whes1015@gmail.com}
+  \github{whes1015}
+  \iconlink{\faRobot}{https://huggingface.co/YuYu1015}{\texttt{huggingface.co/YuYu1015}} \\
+  \degree{B.S. in Electrical Engineering}
+  \university{National Kaohsiung Univ. of Science and Technology}
+  \address{Kaohsiung, Taiwan}
+}
+
+\begin{document}
+\makeheader
+
+%======================================================================
+\begin{abstract}
+I build systems end to end, usually as the only author: an eBPF/XDP packet filter and a five-city
+Nginx/CoreDNS fleet written in Go, ESP32 firmware written register by register, Flutter and
+TypeScript clients, and PyTorch models I train, evaluate and quantise myself. Most of it runs under
+\textbf{ExpTech} (探索科技), the 29-person volunteer organisation I founded and one of two
+administrators of, which operates Taiwan's largest independent earthquake early-warning platform.
+Alongside it I worked as a backend engineer at P-Waver, then as a part-time assistant at Academia
+Sinica's Institute of Information Science, and now write software at the National Health Research
+Institutes.
+\end{abstract}
+
+%======================================================================
+\sectionTitle{Competences}{\faWrench}
+%======================================================================
+\begin{competences}[9em]
+  \comptence{Languages}{%
+    TypeScript/JavaScript, Go, Python, Dart, C/C++, Rust, Lua, Shell
+  }
+  \comptence{Infrastructure}{%
+    Linux, eBPF/XDP, Docker, Nginx/OpenResty, CoreDNS, NTP/SNTP, Prometheus, CI/CD
+  }
+  \comptence{Backend \& apps}{%
+    Go and Node/TypeScript services, REST/WebSocket/SSE, Flutter (iOS \& Android), Electron, MapLibre
+  }
+  \comptence{Embedded}{%
+    ESP32/Arduino, FreeRTOS, I\textsuperscript{2}C/SPI, LSM6DS3, GNSS (QZSS L1S), LoRa/Meshtastic
+  }
+  \comptence{Machine Learning}{%
+    PyTorch, SeisBench, ONNX, scikit-learn, vLLM, llm-compressor, TensorRT Model Optimizer
+  }
+  \comptence{Domain}{%
+    Earthquake early warning, GMPE calibration, CWA/JMA intensity scales, phase picking
+  }
+  \comptence{\icon{\faLanguage} Languages}{%
+    \textbf{Mandarin} --- native; \textbf{English} --- technical reading \& writing
+  }
+\end{competences}
+
+%======================================================================
+\sectionTitle{Education}{\faGraduationCap}
+%======================================================================
+\begin{educations}
+  %% TODO: replace "present" with your expected graduation, e.g. "2022 -- Jun 2027"
+  \education%
+    {}[2022 -- present]%
+    {National Kaohsiung Univ. of Science \& Technology}%
+    {Dept. of Electrical Engineering}%
+    {Electrical Engineering}%
+    {B.S.}
+\end{educations}
+
+%======================================================================
+\sectionTitle{Experience}{\faBriefcase}
+%======================================================================
+\begin{experiences}
+  %% The whole range goes in the end-date slot and the start-date slot is left off:
+  %% resume.cls only closes the table row when a description or tag list follows, so
+  %% \experience[start]{end}{summary} alone would merge into the next row.
+  \experience%
+    {Jan 2025 -- present}%
+    {\textbf{Software Developer} --- National Health Research Institutes
+      (國家衛生研究院), Taiwan}
+
+  \separator{0.6em}
+
+  \experience%
+    {Dec 2024 -- Jun 2025}%
+    {\textbf{Part-time Assistant} --- Institute of Information Science,
+      Academia Sinica (中央研究院資訊科學研究所), Taipei}
+
+  \separator{0.6em}
+
+  \experience%
+    {Nov 2023 -- Nov 2024}%
+    {\textbf{Backend Engineer} --- P-Waver Inc.
+      (衛波科技, earthquake early-warning systems), Taipei}
+
+  \separator{0.6em}
+
+  \experience%
+    {Oct 2020 -- present}%
+    {\textbf{Founder \& Lead Engineer} --- ExpTech (探索科技), Taiwan}%
+    [\begin{itemize}
+      \item Lead a 29-member volunteer organisation across 234 repositories as one of its two
+        administrators, spanning firmware, 37 Go services, Flutter clients and ML pipelines.
+        Authored \textbf{13,411} commits inside it (19,284 across GitHub, 477 PRs) and am top
+        contributor on every flagship codebase --- DPIP 838/2,339, TREM-Lite 448/847, platform API
+        480/803 --- and sole author of the 665-commit production infrastructure repository.
+      \item Signed a data agreement with Taiwan's \textbf{Central Weather Administration (CWA)} in
+        late 2022 --- reported by \emph{親子天下} as the Seismological Center's first non-corporate
+        partner; invited back 10+ times as a collaborator (\emph{天下雜誌}, Feb 2026).
+      \item Ship under real stakes: \textbf{100,000+} Google Play installs and 4.2/5 from 1,378
+        App Store ratings for DPIP; \textbf{328,542} installer downloads across TREM desktop
+        releases. During the M7.2 Hualien earthquake (3 Apr 2024) the network recorded 800+ events
+        in a single day.
+    \end{itemize}]
+\end{experiences}
+
+%======================================================================
+\sectionTitle{Security, Open Source \& Press}{\faLock}
+%======================================================================
+\begin{itemize}
+  \item \textbf{Security \& incident response} --- operated a honeypot that captured in-the-wild
+    exploitation of \textbf{CVE-2025-55182} (React Server Components, CVSS 10.0) within days of its
+    December 2025 disclosure; documented six malware samples with verified hashes and fifteen
+    attacker source addresses.
+  \item \textbf{Open source} --- 12 merged PRs to outside projects: a rendering-performance fix to
+    the seismograph suite \textbf{AnyShake}
+    (\link{https://github.com/anyshake/spectrogram-js}{\texttt{spectrogram-js}}), a
+    Leaflet~$\rightarrow$~MapLibre migration for \texttt{smc.peering.tw}, and Flutter upgrades to
+    \textbf{NKUST-AP-Flutter}, my university's student app.
+  \item \textbf{Press} --- \emph{天下雜誌}, Feb 2026 (quoted as an ExpTech collaborator in a CWA
+    Seismological Center profile); \emph{親子天下}, Jul 2024 (DPIP feature,
+    {\raise0.06ex\hbox{$\sim$}}500,000 downloads after the 3 Apr 2024 quake).
+\end{itemize}
+
+\newpage
+%======================================================================
+\sectionTitle{Selected Engineering Work}{\faCode}
+%======================================================================
+\begin{projects}
+  \project%
+    {}[Dec 2025 -- present]%
+    {sole author}%
+    {Go, eBPF/XDP, OpenResty, CoreDNS}%
+    {Production infrastructure --- packet filtering, edge and DNS}%
+    {\begin{itemize}
+      \item \textbf{kekkai} --- packet filter in Go using \texttt{cilium/ebpf}, with an XDP ingress
+        program and a TC egress hook; \textsc{lru\_hash}/\textsc{array}/\textsc{ringbuf} maps drive
+        per-IP rate limiting, allow/blocklists and port policy, with an emergency detach path.
+      \item \textbf{Nginx/OpenResty fleet} --- 23 upstreams across nodes in Taipei, Kaohsiung,
+        Tainan, Tokyo and Osaka, with Lua modules for traffic accounting, NTP and image proxying.
+      \item \textbf{Split-horizon CoreDNS} with a custom Go \texttt{dnsstats} plugin
+        (\texttt{miekg/dns}) exposing per-domain/client query stats and Prometheus metrics. Sole
+        author too of the NTP server, API gateway and Meshtastic LoRa ingest service.
+    \end{itemize}}
+
+  \separator{0.7em}
+
+  \project%
+    {}[Apr 2026 -- Jul 2026]%
+    {sole author}%
+    {Python, PyTorch, vLLM, TensorRT Model Optimizer}%
+    {LLM inference \& model compression}%
+    {\begin{itemize}
+      \item Published \textbf{27 quantised models} on Hugging Face
+        ({\raise0.06ex\hbox{$\sim$}}\textbf{73,000} all-time downloads) for vLLM and llama.cpp:
+        \textbf{NVFP4} via TensorRT Model Optimizer, INT4-AutoRound and GGUF, up to 35B
+        mixture-of-experts.
+      \item Implemented \textbf{refusal-direction ablation} --- deriving the refusal direction from
+        paired prompts and orthogonalising it out of the weight matrices, rather than steering at
+        inference time --- and released the \emph{Ornith-1.0} 9B/35B line including a DPO-tuned
+        variant.
+    \end{itemize}}
+
+  \separator{0.7em}
+
+  \project%
+    {}[Sep 2025 -- Jun 2026]%
+    {sole author, 7,759 LOC}%
+    {C++, ESP32, FreeRTOS}%
+    {ES-Net --- sensor firmware \& 200-node device network}%
+    {\begin{itemize}
+      \item Hand-wrote an \textbf{LSM6DS3 accelerometer driver at register level} instead of using a
+        vendor library --- own register map, \textsc{who\_am\_i}, \textsc{ctrl1\_xl},
+        \textsc{int1\_ctrl}, FIFO --- plus an IIR filter bank and a binary indexed tree computing a
+        running amplitude percentile on-device.
+      \item Timing is the hard problem here: SNTP in \textsc{smooth} mode so the clock slews rather
+        than steps mid-waveform, plus HW/SW watchdogs, OTA update, and a documented custom binary
+        wire protocol with TOTP device authentication.
+      \item Runs on \textbf{200+ nodes} nationwide; first-generation units were self-assembled for
+        under NT\$800 each.
+    \end{itemize}}
+
+  \separator{0.7em}
+
+  \project%
+    {}[Aug 2023 -- present]%
+    {top contributor, 838/2,339 commits}%
+    {Dart/Flutter, TypeScript}%
+    {DPIP --- cross-platform mobile app \& backend}%
+    {\begin{itemize}
+      \item iOS and Android client with push alerting, MapLibre layers and 10 interface languages;
+        \textbf{100,000+} Google Play installs, 4.2/5 from 1,378 App Store ratings. Wrote the test
+        suite and custom commit-gate tooling outright, and authored the TypeScript backend
+        \texttt{dpip-server-ts} in full (122/122 commits).
+    \end{itemize}}
+
+  \separator{0.7em}
+
+  \project%
+    {}[Aug 2026 -- present]%
+    {sole author, {\raise0.06ex\hbox{$\sim$}}12k LOC with unit tests}%
+    {C++}%
+    {QZSS L1S satellite message decoder}%
+    {\begin{itemize}
+      \item Decodes QZSS L1S 250-bit SBAS frames end to end --- preamble, 6-bit message type,
+        212-bit payload and CRC-24Q --- including type 43 \textbf{DC Report} (JMA disaster
+        broadcasts, IS-QZSS-DCR) and type 44 DCX.
+    \end{itemize}}
+
+  \separator{0.7em}
+
+  \project%
+    {}[Mar 2026 -- Jul 2026]%
+    {sole author}%
+    {Python, PyTorch, SeisBench, ONNX}%
+    {Applied ML --- regression \& sequence models on sensor data}%
+    {\begin{itemize}
+      \item Refit a regression model on \textbf{45,398} CWA PGA/PGV/intensity observations
+        (2000--2025), replacing an equation that over-amplified with magnitude and a site-response
+        term that was double-counted, inflating estimates {\raise0.06ex\hbox{$\sim$}}2$\times$. Held-out:
+        \textbf{62.0\% exact vs 39.7\%} for the model then in production, MAE
+        \textbf{0.400 vs 0.671}, 0\% false alarms.
+      \item Trained a 50\,Hz PhaseNet sequence model over a 6,457-line pipeline (ingest, noise
+        injection, evaluation, ONNX export). Diagnosed a windowing bug --- the source window was
+        shorter than the model window, so the model learned the event always sits mid-window and
+        fired a false pick every 45\,s stride.
+    \end{itemize}}
+
+  \separator{0.7em}
+
+  \project%
+    {}[Jan 2023 -- present]%
+    {top contributor, 448/847 commits}%
+    {JavaScript, Electron, Rust}%
+    {TREM --- desktop platform \& third-party plugin ecosystem}%
+    {\begin{itemize}
+      \item Cross-platform Electron client with \textbf{328,542 installer downloads} across 74
+        releases, shipped continuously since Jan 2023. Designed the plugin system third parties
+        extend it through and maintain its registry (417 commits); wrote the
+        \texttt{trem-monitor} health service in Rust (105/150).
+    \end{itemize}}
+\end{projects}
+
+\end{document}
